@@ -201,9 +201,9 @@ This will autogenerate configurations for the new circuit.
 2. Search for your contract's address.
 3. Complete the verification steps.
 
-## 🛠️ Authors
+## 👨‍💻 Authors
 
-- **Anshu Kumar** - Developer of the project.
+<img src="https://github.com/user-attachments/assets/b822f86c-fb45-4dac-8097-7e95dd91a304" width="50" height="40">**Anshu Kumar** - [@AnshuKumar](https://github.com/Ansh-Ks18)
 
 ## 📄 License
 
