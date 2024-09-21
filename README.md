@@ -31,8 +31,8 @@ Before starting, ensure you have the following tools:
 ### 1. Cloning the Project
 
 ```bash
-git clone https://github.com/your-repo/polyproof-zketh-circuit.git
-cd polyproof-zketh-circuit
+git clone [https://github.com/your-repo/polyproof-zketh-circuit.git](https://github.com/Ansh-Ks18/Polygon-zkEVM.git)
+cd zketh-circuit
 ```
 
 ### 2. Designing the zkSNARK Circuit
