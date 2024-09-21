@@ -42,7 +42,7 @@ Below is the circuit that checks the multiplication of inputs `A` and `B`, and p
 ```circom
 pragma circom 2.0.0;
 
-template ZKSnarkCircuit () {
+template MyCircuit () {
    // Signal inputs
    signal input A;
    signal input B;
@@ -129,7 +129,7 @@ This script:
 ## 🗂️ Directory Structure
 
 ```
-polyproof-zketh-circuit/
+zketh-circuit/
 ├── circuits/
 │   ├── MyCircuit/
 │   │   ├── circuit.circom
