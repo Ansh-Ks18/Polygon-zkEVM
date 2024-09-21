@@ -1,42 +1,52 @@
-# PolyProof-ZKETH-Circuit
+# 🌐 ZKETH-Circuit 🔒
 
-This repository contains the implementation of a zkSNARK circuit that performs specific logical operations. The circuit is designed to prove knowledge of inputs A = 0 and B = 1 that yield an output of 0. Additionally, this project includes deploying a verifier on-chain to verify proofs generated from this circuit.
+This repository implements a zkSNARK circuit that proves the knowledge of specific logical inputs. It demonstrates how input values `A = 0` and `B = 1` lead to an output of `0`. This project also includes deploying a verifier contract on the Polygon network to verify the generated proof.
 
-## Description
+![Circuit Diagram](https://github.com/user-attachments/assets/b2ecc304-5c9e-4ed6-8b19-7ba18bc20612)
 
-This Circom project involves creating a zkSNARK circuit to demonstrate knowledge of specific logical inputs and their resulting output. The circuit implements logical gates, and the resulting proof is verified on-chain using a verifier contract deployed on the Polygon network (Cardona zkEVM or Sepolia or Mumbai Testnet).
+## 📜 Description
 
-## Video Tutorial
+This **Circom** project is designed to create a **zkSNARK** circuit that proves knowledge of logical inputs and their output. The circuit utilizes logical gates (AND, OR, NOT) to produce an output that can be cryptographically proven and verified on-chain. This implementation is deployed on **Polygon zkEVM (Cardano Testnet/Mumbai Testnet)**.
 
-For a detailed walkthrough of the code and how the project works, check out the [Loom video](https://www.loom.com/share/652193f33368463abd808c9780b6c9b3?sid=f1fc130e-8320-448a-9aa0-e6d78bb63401).
+**Core Features:**
+- Use of zkSNARK circuits to prove logical operations.
+- On-chain verification using a Solidity verifier contract.
+- Compatible with **Polygon zkEVM**, **Sepolia**, or **Mumbai Testnet**.
 
-## Prerequisites
+## 🎥 Video Tutorial
 
-- [MetaMask](https://metamask.io/) installed in your browser
-- [Hardhat](https://github.com/gmchad/zardkat) for compiling and deploying the contract
-- [Circom](https://docs.circom.io/) for writing and compiling the circuit
-- VS Code Integrated development Environment 
+For a detailed video walkthrough, watch the [Loom video](https://www.loom.com/share/652193f33368463abd808c9780b6c9b3?sid=f1fc130e-8320-448a-9aa0-e6d78bb63401).
 
-## Getting Started
+## 🚀 Prerequisites
 
-### Executing program
+Before starting, ensure you have the following tools:
 
-1. To build and run this project, we can use VS Code or GitPod.
-2. Create a new file by clicking on the "+" icon in the left-hand sidebar.
-3. Clone the repository Harhat circom.
-4. Design the code according to circuit mentioned below.
-![image](https://github.com/user-attachments/assets/b2ecc304-5c9e-4ed6-8b19-7ba18bc20612)
+- [MetaMask](https://metamask.io/) wallet extension.
+- [Hardhat](https://hardhat.org/) for compiling and deploying contracts.
+- [Circom](https://docs.circom.io/) for circuit creation and compilation.
+- Visual Studio Code (VS Code) or GitPod for development.
 
+## 🏁 Getting Started
+
+### 1. Cloning the Project
+
+```bash
+git clone https://github.com/your-repo/polyproof-zketh-circuit.git
+cd polyproof-zketh-circuit
 ```
+
+### 2. Designing the zkSNARK Circuit
+
+Below is the circuit that checks the multiplication of inputs `A` and `B`, and performs logical operations.
+
+```circom
 pragma circom 2.0.0;
 
-/*This circuit template checks that c is the multiplication of a and b.*/  
-
-template ZKSnarkCircuit () {  
+template ZKSnarkCircuit () {
    // Signal inputs
    signal input A;
    signal input B;
-   
+
    // Signals from gates
    signal X;
    signal Y;
@@ -62,127 +72,143 @@ template ZKSnarkCircuit () {
    Q <== Or_Gate.out;
 }
 
+// AND gate
 template AND() {
     signal input a;
     signal input b;
     signal output out;
-
-    out <== a*b;
+    out <== a * b;
 }
 
+// NOT gate
 template NOT() {
     signal input in;
     signal output out;
-
     out <== 1 + in - 2*in;
 }
 
+// OR gate
 template OR() {
     signal input a;
     signal input b;
     signal output out;
-
-    out <== a + b - a*b;
+    out <== a + b - a * b;
 }
 
 component main = ZKSnarkCircuit();
 ```
-### Install
-`npm i`
 
-### Compile
-`npx hardhat circom` 
-This will generate the **out** file with circuit intermediaries and geneate the **MultiplierVerifier.sol** contract
+### 3. Installing Dependencies
 
-### Prove and Deploy
-`npx hardhat run scripts/deploy.ts --network zkEVM`
-This script does 4 things  
-1. Deploys the MultiplierVerifier.sol contract
-2. Generates a proof from circuit intermediaries with `generateProof()`
-3. Generates calldata with `generateCallData()`
-4. Calls `verifyProof()` on the verifier contract with calldata
+```bash
+npm install
+```
 
-With two commands you can compile a ZKP, generate a proof, deploy a verifier, and verify the proof 🎉
+### 4. Compiling the Circuit
 
-## Configuration
-### Directory Structure
-**circuits**
+```bash
+npx hardhat circom
 ```
-├── multiplier
-│   ├── circuit.circom
-│   ├── input.json
-│   └── out
-│       ├── circuit.wasm
-│       ├── multiplier.r1cs
-│       ├── multiplier.vkey
-│       └── multiplier.zkey
-├── new-circuit
-└── powersOfTau28_hez_final_12.ptau
-```
-Each new circuit lives in it's own directory. At the top level of each circuit directory lives the circom circuit and input to the circuit.
-The **out** directory will be autogenerated and store the compiled outputs, keys, and proofs. The Powers of Tau file comes from the Polygon Hermez ceremony, which saves time by not needing a new ceremony. 
 
-**contracts**
-```
-contracts
-└── MultiplierVerifier.sol
-```
-Verifier contracts are autogenerated and prefixed by the circuit name, in this example **Multiplier**
+This generates the necessary files, including the `MyCircuitVerifier.sol` contract in the `out` directory.
 
-## hardhat.config.ts
+### 5. Deploying the Contract
+
+To deploy the verifier contract and generate proof:
+
+```bash
+npx hardhat run scripts/deploy.ts --network zkEVM
 ```
-  circom: {
-    // (optional) Base path for input files, defaults to `./circuits/`
-    inputBasePath: "./circuits",
-    // (required) The final ptau file, relative to inputBasePath, from a Phase 1 ceremony
-    ptau: "powersOfTau28_hez_final_12.ptau",
-    // (required) Each object in this array refers to a separate circuit
-    circuits: JSON.parse(JSON.stringify(circuits))
-  },
+
+This script:
+1. Deploys the `MyCircuitVerifier.sol` contract.
+2. Generates proof using the circuit intermediaries.
+3. Prepares calldata for the verifier.
+4. Calls `verifyProof()` on-chain.
+
+## 🗂️ Directory Structure
+
 ```
-### circuits.config.json
-circuits configuation is separated from hardhat.config.ts for **autogenerated** purposes (see next section)
+polyproof-zketh-circuit/
+├── circuits/
+│   ├── MyCircuit/
+│   │   ├── circuit.circom
+│   │   ├── input.json
+│   │   └── out/
+│   │       ├── circuit.wasm
+│   │       ├── MyCircuit.r1cs
+│   │       ├── MyCircuit.vkey
+│   │       └── MyCircuit.zkey
+├── contracts/
+│   └── MyCircuitVerifier.sol
 ```
+
+## ⚙️ Configuration
+
+### `hardhat.config.ts`
+
+```typescript
+circom: {
+  inputBasePath: "./circuits",
+  ptau: "powersOfTau28_hez_final_12.ptau",
+  circuits: JSON.parse(JSON.stringify(circuits))
+}
+```
+
+### `circuits.config.json`
+
+```json
 [
   {
-    "name": "multiplier",
+    "name": "MyCircuit",
     "protocol": "groth16",
-    "circuit": "multiplier/circuit.circom",
-    "input": "multiplier/input.json",
-    "wasm": "multiplier/out/circuit.wasm",
-    "zkey": "multiplier/out/multiplier.zkey",
-    "vkey": "multiplier/out/multiplier.vkey",
-    "r1cs": "multiplier/out/multiplier.r1cs",
+    "circuit": "MyCircuit/circuit.circom",
+    "input": "MyCircuit/input.json",
+    "wasm": "MyCircuit/out/circuit.wasm",
+    "zkey": "MyCircuit/out/MyCircuit.zkey",
+    "vkey": "MyCircuit/out/MyCircuit.vkey",
+    "r1cs": "MyCircuit/out/MyCircuit.r1cs",
     "beacon": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
   }
 ]
 ```
 
-**adding circuits**   
-To add a new circuit, you can run the `newcircuit` hardhat task to autogenerate configuration and directories i.e  
-```
+### Adding a New Circuit
+
+You can easily add a new circuit by running:
+
+```bash
 npx hardhat newcircuit --name newcircuit
 ```
 
-## Connecting MetaMask with Polygon zkEVM Cardona Testnet
+This will autogenerate configurations for the new circuit.
 
-1. Open MetaMask and click on the network dropdown at the top.
-2. Select "Add Network" and fill in the following details:
+## 📝 Verifying on Polygon zkEVM
+
+### Connect MetaMask to Polygon zkEVM Cardona Testnet:
+
+1. Open MetaMask and click **Add Network**.
+2. Enter the following details:
     - **Network Name:** Polygon zkEVM Cardona Testnet
-    - **New RPC URL:** https://polygon-zkevm-cardona.blockpi.network/v1/rpc/public
-    - **ChainID:** 2442
+    - **RPC URL:** https://rpc.cardona.zkevm-rpc.com
+    - **Chain ID:** 2442
     - **Symbol:** ETH
-3. Save and switch to the new network.
+3. Click **Save**.
 
-## Verifying Contract on PolygonScan
+### Verify the Contract on PolygonScan
 
-1. Go to PolygonScan(https://cardona-zkevm.polygonscan.com/).
-2. Search for your contract address.
-3. Complete the verification.
+1. Head to [PolygonScan](https://cardona-zkevm.polygonscan.com/).
+2. Search for your contract's address.
+3. Complete the verification steps.
 
-## Authors
-Mannat Gupta
+## 🛠️ Authors
 
-## License
+- **Anshu Kumar** - Developer of the project.
 
-This project is licensed under the MIT License - see the LICENSE.md file for details
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE.md) file for more details.
+
+---
+
+### 🎉 Start generating ZK proofs and deploy your verifier now!
