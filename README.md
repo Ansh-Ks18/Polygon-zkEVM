@@ -15,7 +15,7 @@ This **Circom** project is designed to create a **zkSNARK** circuit that proves 
 
 ## 🎥 Video Tutorial
 
-For a detailed video walkthrough, watch the [Loom video](https://www.loom.com/share/652193f33368463abd808c9780b6c9b3?sid=f1fc130e-8320-448a-9aa0-e6d78bb63401).
+For a detailed video walkthrough, watch the [video](https://drive.google.com/file/d/1RdVPefJ9uOv87c0zZs0ty5EMY__dVRVS/view?usp=sharing).
 
 ## 🚀 Prerequisites
 
