@@ -95,7 +95,7 @@ template OR() {
     out <== a + b - a * b;
 }
 
-component main = ZKSnarkCircuit();
+component main = MyCircuit();
 ```
 
 ### 3. Installing Dependencies
